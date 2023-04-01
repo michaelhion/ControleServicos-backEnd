@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  app:
+    image: 'controleservico'
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    container_name: controleservicocompose
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/servicos
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=senha
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+          
+  db:
+    image: 'postgres'
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=senha
+      - POSTGRES_DB=servicos
+    expose:
+      - 5432
