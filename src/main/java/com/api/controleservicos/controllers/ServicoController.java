@@ -3,7 +3,10 @@ package com.api.controleservicos.controllers;
 
 import java.util.List;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.controleservicos.models.Servico;
 import com.api.controleservicos.services.ServicoService;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/servicos")
@@ -24,50 +28,55 @@ public class ServicoController {
 	
 	@Autowired
 	private ServicoService serv;
-	
+
+	@PostMapping
+	@Transactional
+	public ResponseEntity cadastrar(@RequestBody Servico servico, UriComponentsBuilder uriBuilder){
+		this.serv.adicionar(servico);
+
+		var uri = uriBuilder.path("/pacientes/{id}").buildAndExpand(servico.getId()).toUri();
+
+		return ResponseEntity.created(uri).body(new Servico());
+	}
+
 	@GetMapping
 	public ResponseEntity<List<Servico>> listar(){
-		return new ResponseEntity<List<Servico>>(this.serv.listar(),HttpStatus.OK);
+		var retorno =  serv.listar();
+		return ResponseEntity.ok(retorno);
 	}
-	
-	@GetMapping("/mes/{nrMes}")
-	public ResponseEntity<List<Servico>> filtroMes(@PathVariable(value = "nrMes") int nrMes){
-		return new ResponseEntity<List<Servico>>(this.serv.buscarMes(nrMes),HttpStatus.OK);
+
+	@PutMapping
+	@Transactional
+	public ResponseEntity atualizar(@RequestBody Servico servico) {
+
+		serv.alterar(servico);
+
+		return ResponseEntity.ok(servico);
 	}
-	
-	@GetMapping("/total")
-	public ResponseEntity<?> total(){
-		return new ResponseEntity<>(this.serv.total(),HttpStatus.OK);
-	}
-	
-	@GetMapping("/totalcomissao")
-	public ResponseEntity<?> totalComissao(){
-		return new ResponseEntity<>(this.serv.totalComissao(),HttpStatus.OK);
-	}
-	
-	@GetMapping("/totalliquido")
-	public ResponseEntity<?> totalLiquido(){
-		return new ResponseEntity<>(this.serv.totalLiquido(),HttpStatus.OK);
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarPorId(@PathVariable(value = "id") Long id){
-		return new ResponseEntity<>(this.serv.buscarPorId(id),HttpStatus.OK);
-	}
-	
-	@PostMapping
-	public ResponseEntity<Servico> adicionar(@RequestBody Servico servico){
-		return new ResponseEntity<Servico>(this.serv.adicionarOuAlterar(servico),HttpStatus.CREATED);
-	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> excluir(@PathVariable(value = "id") Long id){
-		this.serv.excluir(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+	@Transactional
+	public ResponseEntity excluir(@PathVariable Long id){
+		serv.excluir(id);
+		return ResponseEntity.noContent().build();
 	}
-		
-	@PutMapping("/{id}")
-	public ResponseEntity<Servico> alterar(@PathVariable(value = "id") Long id,@RequestBody Servico servico){
-		return new ResponseEntity<Servico>(this.serv.adicionarOuAlterar(servico),HttpStatus.OK);
+
+	@GetMapping("/{id}")
+	public ResponseEntity buscarPorId(@PathVariable Long id){
+		var servico1 = serv.buscarPorId(id);
+
+		return ResponseEntity.ok(servico1);
+	}
+
+	@GetMapping("/selecionaIdENomeServicoPorId/{id}")
+	public ResponseEntity selecionaIdENomeServicoPorId(@PathVariable Long id){
+		var servico = serv.dadosServicoPorId(id);
+		return ResponseEntity.ok(servico);
+	}
+
+	@GetMapping("/selecionaIdENomeCliente")
+	public ResponseEntity selecionaIdENomeCliente(){
+		var servico = serv.dadosServico();
+		return ResponseEntity.ok(servico);
 	}
 }
