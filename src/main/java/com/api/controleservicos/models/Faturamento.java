@@ -20,6 +20,7 @@ public class Faturamento {
     private Long servicoId;
 
     private Date data;
+
     public Long getId() {
         return id;
     }

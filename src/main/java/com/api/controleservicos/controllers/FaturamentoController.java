@@ -5,11 +5,15 @@ import com.api.controleservicos.models.Faturamento;
 import com.api.controleservicos.models.Servico;
 import com.api.controleservicos.repositories.FaturamentoRepository;
 import com.api.controleservicos.services.FaturamentoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Date;
@@ -17,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/faturamento")
+@SecurityRequirement(name = "bearer-key")
 public class FaturamentoController {
 
     @Autowired
@@ -54,6 +59,15 @@ public class FaturamentoController {
         var fat1 = serv.bustaPorId(id);
 
         return ResponseEntity.ok(fat1);
+    }
+
+    @GetMapping("/gerarExcel")
+    public ResponseEntity<byte[]> excel(){
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\"myfilename.xlsx\"")
+                .body(serv.geraExcel());
     }
 
     @PutMapping("/alterar/{id}")
