@@ -3,6 +3,7 @@ package com.api.controleservicos.controllers;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/servicos")
+@SecurityRequirement(name = "bearer-key")
 public class ServicoController {
 	
 	@Autowired

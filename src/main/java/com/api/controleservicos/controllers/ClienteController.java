@@ -3,6 +3,7 @@ package com.api.controleservicos.controllers;
 import com.api.controleservicos.models.Cliente;
 import com.api.controleservicos.models.Servico;
 import com.api.controleservicos.services.ClienteService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
+@SecurityRequirement(name = "bearer-key")
 public class ClienteController {
 
     @Autowired
