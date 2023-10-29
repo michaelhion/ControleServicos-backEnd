@@ -1,21 +1,16 @@
-# FROM openjdk
-#
-# WORKDIR /app
-#
-# COPY target/api.controleservicos-0.0.1-SNAPSHOT.jar /app/api.controleservicos.jar
-#
-# ENTRYPOINT ["java","-jar","api.controleservicos.jar"]
-# Usa uma imagem base do OpenJDK para Java 17
-FROM openjdk:17
+FROM ubuntu:latest AS build
 
-# Define o diretório de trabalho dentro do container
-WORKDIR /app
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
 
-# Copia o arquivo JAR da sua aplicação para o diretório de trabalho no container
-COPY target/api.controleservicos-0.0.1-SNAPSHOT.jar /app/api.controleservicos.jar
+RUN apt-get install maven -y
+RUN mvn clean install
 
-# Expõe a porta em que a aplicação Spring Boot vai escutar
+FROM openjdk:17-jdk-slim
+
 EXPOSE 8080
 
-# Comando para executar a aplicação Spring Boot
-CMD ["java", "-jar", "api.controleservicos.jar"]
+COPY --from=build target/api.controleservicos-0.0.1-SNAPSHOT.jar /app/api.controleservicos.jar
+
+ENTRYPOINT [ "java", "-jar", "app.jar" ]
