@@ -3,7 +3,9 @@ package com.api.controleservicos.controllers;
 import com.api.controleservicos.models.Cliente;
 import com.api.controleservicos.models.Servico;
 import com.api.controleservicos.services.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/clientes")
 @SecurityRequirement(name = "bearer-key")
+@Tag(name = "Cliente")
 public class ClienteController {
 
     @Autowired
@@ -22,6 +25,7 @@ public class ClienteController {
 
     @PostMapping
     @Transactional
+    @Operation(summary = "Cadastra cliente")
     public ResponseEntity cadastrar(@RequestBody Cliente cliente, UriComponentsBuilder uriBuilder){
         this.serv.adicionar(cliente);
 
@@ -31,6 +35,7 @@ public class ClienteController {
     }
 
     @GetMapping
+    @Operation(summary = "Lista cliente")
     public ResponseEntity<List<Cliente>> listar(){
         var retorno =  serv.listar();
         return ResponseEntity.ok(retorno);
@@ -38,6 +43,7 @@ public class ClienteController {
 
     @PutMapping
     @Transactional
+    @Operation(summary = "Edita cliente")
     public ResponseEntity atualizar(@RequestBody Cliente cliente) {
         serv.alterar(cliente);
 
@@ -46,12 +52,14 @@ public class ClienteController {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @Operation(summary = "Exclui cliente")
     public ResponseEntity excluir(@PathVariable Long id){
         serv.excluir(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Lista cliente por id")
     public ResponseEntity buscarPorId(@PathVariable Long id){
         var servico1 = serv.buscarPorId(id);
 

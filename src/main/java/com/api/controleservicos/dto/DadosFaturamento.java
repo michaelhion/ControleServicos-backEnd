@@ -7,8 +7,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public record DadosFaturamento(
-        @Schema(name = "Id", description = "Id do cliente gerado automaticamente pelo sistema")
-        Long id,
         @Schema(name = "Nome do cliente", description = "Armazena o nome do cliente que recebeu o servico")
         @NotBlank(message = "Nomo do cliente não pode ser nulo")
         String nomeCliente,

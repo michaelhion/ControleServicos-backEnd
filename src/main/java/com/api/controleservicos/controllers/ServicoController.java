@@ -3,7 +3,9 @@ package com.api.controleservicos.controllers;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/servicos")
 @SecurityRequirement(name = "bearer-key")
+@Tag(name = "Serviço")
 public class ServicoController {
 	
 	@Autowired
@@ -33,6 +36,7 @@ public class ServicoController {
 
 	@PostMapping
 	@Transactional
+	@Operation(summary = "Cadastra serviço")
 	public ResponseEntity cadastrar(@RequestBody Servico servico, UriComponentsBuilder uriBuilder){
 		this.serv.adicionar(servico);
 
@@ -42,6 +46,7 @@ public class ServicoController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Lista serviços")
 	public ResponseEntity<List<Servico>> listar(){
 		var retorno =  serv.listar();
 		return ResponseEntity.ok(retorno);
@@ -49,6 +54,7 @@ public class ServicoController {
 
 	@PutMapping
 	@Transactional
+	@Operation(summary = "Edita serviço")
 	public ResponseEntity atualizar(@RequestBody Servico servico) {
 
 		serv.alterar(servico);
@@ -58,6 +64,7 @@ public class ServicoController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
+	@Operation(summary = "Exclui serviço")
 	public ResponseEntity excluir(@PathVariable Long id){
 		serv.excluir(id);
 		return ResponseEntity.noContent().build();
