@@ -1,4 +1,12 @@
 package com.api.controleservicos.dto;
 
-public record DadosAutenticacao(String login,String senha) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record DadosAutenticacao(
+
+        @Schema(name = "Login", description = "string que representa o nome do usuário")
+
+        String login,
+        @Schema(name = "Senha", description = "armazena a senha")
+        String senha) {
 }

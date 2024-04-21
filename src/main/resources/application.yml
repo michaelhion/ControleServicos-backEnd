@@ -7,9 +7,9 @@ spring:
     hbm2ddl.auto: create
   properties:
   datasource:
-  url: ${DATABASE_URL}
-  username: ${DATABASE_USERNAME}
-  password: ${DATABASE_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   jackson.time-zone: America/Sao_Paulo
   server:
     error:
