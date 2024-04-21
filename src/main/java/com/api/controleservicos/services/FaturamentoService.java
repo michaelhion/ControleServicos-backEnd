@@ -33,13 +33,17 @@ public class FaturamentoService {
     }
 
     public void alterar(Faturamento fat) {
-        if(repo.existsById(fat.getId())){
+        if(existeById(fat.getId())){
             repo.save(fat);
         }
     }
 
+    private boolean existeById(Long fat) {
+        return repo.existsById(fat);
+    }
+
     public void deletar(Long id) {
-        if(repo.existsById(id)) {
+        if(existeById(id)) {
             repo.deleteById(id);
         }
     }

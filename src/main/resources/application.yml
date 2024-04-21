@@ -1,0 +1,24 @@
+
+spring:
+  jpa:
+  show-sql: true
+  hibernate:
+    ddl-auto: update
+    hbm2ddl.auto: create
+  properties:
+  datasource:
+  url: ${DATABASE_URL}
+  username: ${DATABASE_USERNAME}
+  password: ${DATABASE_PASSWORD}
+  jackson.time-zone: America/Sao_Paulo
+  server:
+    error:
+    include-stacktrace: never
+api:
+  security:
+    token.secret : ${JWT_SECRET}
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    springdoc.swagger-ui.path: /docs
